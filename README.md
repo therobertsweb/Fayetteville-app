@@ -9,6 +9,6 @@ El proyecto, las instrucciones de desarrollo y la documentación están en [peop
 - Análisis de Dart sin incidencias y 131 pruebas aprobadas.
 - Compilación iOS Release instalada en Work_phone; iconos iOS corregidos con el logo de la app.
 - Firebase configurado para avisos dentro de la app. La entrega real a un dispositivo sigue pendiente de verificación.
-- Android pendiente de validación; no se ha enviado esta versión a TestFlight.
+- Android pendiente de validación; la versión iOS 1.0.0 (16) fue subida a App Store Connect para TestFlight.
 
 Consulta [la configuración de notificaciones](people_voice_mobile/docs/PUSH_SETUP.md) para los requisitos y límites actuales.
