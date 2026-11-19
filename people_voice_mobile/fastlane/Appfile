@@ -1,0 +1,2 @@
+package_name('com.fayettevillepeoplevoice.people_voice')
+json_key_file(ENV.fetch('GOOGLE_PLAY_JSON_KEY'))

@@ -1,0 +1,29 @@
+[Unit]
+Description=The People Voice podcasts and app promotions
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=exec
+User=peoplevoice-podcasts
+Group=peoplevoice-podcasts
+WorkingDirectory=/opt/people-voice-podcasts
+EnvironmentFile=/etc/people-voice-podcasts.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/people-voice-podcasts/.venv/bin/uvicorn podcast_service.app:app --host 127.0.0.1 --port 8001 --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=35
+UMask=0077
+StateDirectory=people-voice-podcasts
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/people-voice-podcasts
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target

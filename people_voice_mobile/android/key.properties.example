@@ -1,0 +1,7 @@
+# Copy to key.properties and fill in private values on the release machine.
+# key.properties and keystores are ignored by Git. Never commit actual keys.
+# Use an absolute path (escape Windows backslashes as \\).
+storeFile=/absolute/path/to/upload-keystore.jks
+storePassword=
+keyAlias=upload
+keyPassword=

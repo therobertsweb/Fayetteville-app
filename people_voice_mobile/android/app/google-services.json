@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "422174023287",
+    "project_id": "fayetteville-the-people-voice",
+    "storage_bucket": "fayetteville-the-people-voice.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422174023287:android:b5d08af03bd255e0e8f072",
+        "android_client_info": {
+          "package_name": "com.fayettevillepeoplevoice.people_voice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkDUjIt6O9vnmrlTGg0-cRZQ0yeCVYyqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

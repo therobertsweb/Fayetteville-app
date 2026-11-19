@@ -1,0 +1,28 @@
+{
+  "message": {
+    "topic": "people_voice_news_in_app_v1",
+    "data": {
+      "mode": "in_app",
+      "kind": "news",
+      "content_id": "42",
+      "title": "Community update",
+      "body": "A new story is available."
+    },
+    "android": {
+      "priority": "normal",
+      "ttl": "0s"
+    },
+    "apns": {
+      "headers": {
+        "apns-push-type": "background",
+        "apns-priority": "5",
+        "apns-expiration": "0"
+      },
+      "payload": {
+        "aps": {
+          "content-available": 1
+        }
+      }
+    }
+  }
+}

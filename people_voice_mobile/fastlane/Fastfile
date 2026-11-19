@@ -1,0 +1,18 @@
+default_platform(:android)
+
+platform :android do
+  desc 'Check service account credentials without uploading a build'
+  lane :verify_credentials do
+    validate_play_store_json_key(json_key: ENV.fetch('GOOGLE_PLAY_JSON_KEY'))
+  end
+
+  desc 'Check access to the existing Google Play internal testing track'
+  lane :verify_access do
+    codes = google_play_track_version_codes(
+      package_name: 'com.fayettevillepeoplevoice.people_voice',
+      json_key: ENV.fetch('GOOGLE_PLAY_JSON_KEY'),
+      track: 'internal'
+    )
+    UI.success("Google Play access confirmed. Internal version codes: #{codes.join(', ')}")
+  end
+end

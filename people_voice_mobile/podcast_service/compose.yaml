@@ -1,0 +1,21 @@
+services:
+  podcasts:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      PODCAST_PUBLIC_BASE_URL: ${PODCAST_PUBLIC_BASE_URL:-https://podcasts.fayettevillethepeoplevoice.com}
+      NEWS_API_BASE_URL: https://fayettevillethepeoplevoice.com/api/v1
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:?Set the Stripe API secret in .env}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:?Set the Stripe webhook secret in .env}
+      PROMOTION_PRICE_CENTS: ${PROMOTION_PRICE_CENTS:-500}
+      PROMOTION_CURRENCY: ${PROMOTION_CURRENCY:-usd}
+      PROMOTION_DAYS: ${PROMOTION_DAYS:-7}
+    ports:
+      - 127.0.0.1:8001:8000
+    volumes:
+      - podcast_data:/data
+
+volumes:
+  podcast_data:

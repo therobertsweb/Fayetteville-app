@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "$0")/.." && pwd)"
+export JAVA_HOME="${JAVA_HOME:-$HOME/.local/share/fayetteville-tools/jdk17/Contents/Home}"
+export ANDROID_HOME="${ANDROID_HOME:-$HOME/.local/share/fayetteville-tools/android-sdk}"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export GRADLE_USER_HOME="${GRADLE_USER_HOME:-$HOME/.gradle}"
+export PATH="$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$PATH"
+
+if [[ ! -x "$JAVA_HOME/bin/java" || ! -d "$ANDROID_HOME/platforms" ]]; then
+  echo "Local Android build tools are not installed yet." >&2
+  exit 1
+fi
+cd "$project_dir"
+exec "$project_dir/scripts/flutter.sh" --no-version-check build appbundle --release "$@"

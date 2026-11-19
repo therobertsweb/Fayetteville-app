@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+project_dir="$(cd "$(dirname "$0")/.." && pwd)"
+export PATH="$project_dir/.tooling/ruby-local/bin:$PATH"
+export BUNDLE_GEMFILE="$project_dir/Gemfile"
+export BUNDLE_PATH="$project_dir/.tooling/bundle"
+export FASTLANE_OPT_OUT_USAGE=1
+export FASTLANE_SKIP_UPDATE_CHECK=1
+export GOOGLE_PLAY_JSON_KEY="${GOOGLE_PLAY_JSON_KEY:-$project_dir/.tooling/google-play/service-account.json}"
+cd "$project_dir"
+if [[ ! -x "$project_dir/.tooling/ruby-local/bin/bundle" ]]; then
+  echo 'Local Ruby is not installed yet. See docs/GOOGLE_PLAY_CLI.md.' >&2
+  exit 1
+fi
+exec bundle exec fastlane "$@"

@@ -1,0 +1,6 @@
+**
+!podcast_service/
+!podcast_service/**
+podcast_service/__pycache__/
+podcast_service/*.pyc
+podcast_service/podcast_data/
