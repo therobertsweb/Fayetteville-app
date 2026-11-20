@@ -269,14 +269,11 @@ class _IphoneFeedState extends State<IphoneFeed> {
       'November',
       'December',
     ];
-    return RefreshIndicator(
-      onRefresh: () => load(reset: true),
-      child: ListView(
-        key: const PageStorageKey('iphone-news'),
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-        children: [
-          Row(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+          child: Row(
             children: [
               const Expanded(
                 child: Text(
@@ -304,231 +301,253 @@ class _IphoneFeedState extends State<IphoneFeed> {
               ),
             ],
           ),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final brand = GestureDetector(
-                onTap: widget.onAccount,
-                child: Semantics(
-                  button: true,
-                  label: 'The People Voice account',
-                  child: const Text(
-                    'The People\nVoice',
-                    style: TextStyle(
-                      fontSize: 32,
-                      height: .96,
-                      letterSpacing: -1.4,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-              );
-              final advertise = FilledButton(
-                onPressed: widget.onAdvertise,
-                child: const Text('Advertise'),
-              );
-              if (constraints.maxWidth < 330 ||
-                  MediaQuery.textScalerOf(context).scale(1) > 1.3) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [brand, const SizedBox(height: 12), advertise],
-                );
-              }
-              return Row(
-                children: [
-                  Expanded(child: brand),
-                  const SizedBox(width: 10),
-                  advertise,
-                ],
-              );
-            },
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '${months[now.month - 1]} ${now.day}',
-            style: TextStyle(
-              fontSize: 30,
-              height: 1.1,
-              fontWeight: FontWeight.w800,
-              letterSpacing: -.8,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 22),
-          FutureBuilder<FeedResult>(
-            future: categories,
-            builder: (context, snapshot) {
-              final topics =
-                  (snapshot.data?.body['data'] as List?)
-                      ?.whereType<String>()
-                      .toList() ??
-                  [];
-              if (topics.isEmpty) return const SizedBox.shrink();
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    for (final topic in topics)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: ActionChip(
-                          backgroundColor: Theme.of(context)
-                              .colorScheme
-                              .surface,
-                          side: BorderSide.none,
-                          shape: const StadiumBorder(),
-                          label: Text(
-                            topic,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (_) => CategoryArticlesPage(
-                                repository: widget.repository,
-                                category: topic,
-                              ),
-                            ),
+        ),
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () => load(reset: true),
+            child: ListView(
+              key: const PageStorageKey('iphone-news'),
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+              children: [
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final brand = GestureDetector(
+                      onTap: widget.onAccount,
+                      child: Semantics(
+                        button: true,
+                        label: 'The People Voice account',
+                        child: const Text(
+                          'The People\nVoice',
+                          style: TextStyle(
+                            fontSize: 32,
+                            height: .96,
+                            letterSpacing: -1.4,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
                       ),
-                  ],
+                    );
+                    final advertise = FilledButton(
+                      onPressed: widget.onAdvertise,
+                      child: const Text('Advertise'),
+                    );
+                    if (constraints.maxWidth < 330 ||
+                        MediaQuery.textScalerOf(context).scale(1) > 1.3) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          brand,
+                          const SizedBox(height: 12),
+                          advertise,
+                        ],
+                      );
+                    }
+                    return Row(
+                      children: [
+                        Expanded(child: brand),
+                        const SizedBox(width: 10),
+                        advertise,
+                      ],
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-          const SizedBox(height: 22),
-          const Text(
-            'Top Stories',
-            style: TextStyle(
-              color: newsAccent,
-              fontSize: 29,
-              fontWeight: FontWeight.w800,
-              letterSpacing: -.8,
-            ),
-          ),
-          const SizedBox(height: 14),
-          if (warning != null) Notice(warning!),
-          if (posts.isNotEmpty)
-            IphoneStory(
-              post: posts.first,
-              repository: widget.repository,
-              lead: true,
-            ),
-          Container(
-            key: const ValueKey('weekly-promotions'),
-            margin: const EdgeInsets.symmetric(vertical: 16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(22),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+                const SizedBox(height: 8),
+                Text(
+                  '${months[now.month - 1]} ${now.day}',
+                  style: TextStyle(
+                    fontSize: 30,
+                    height: 1.1,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -.8,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 22),
+                FutureBuilder<FeedResult>(
+                  future: categories,
+                  builder: (context, snapshot) {
+                    final topics =
+                        (snapshot.data?.body['data'] as List?)
+                            ?.whereType<String>()
+                            .toList() ??
+                        [];
+                    if (topics.isEmpty) return const SizedBox.shrink();
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          for (final topic in topics)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: ActionChip(
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .surface,
+                                side: BorderSide.none,
+                                shape: const StadiumBorder(),
+                                label: Text(
+                                  topic,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (_) => CategoryArticlesPage(
+                                      repository: widget.repository,
+                                      category: topic,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 22),
                 const Text(
-                  'SPONSORED',
+                  'Top Stories',
                   style: TextStyle(
                     color: newsAccent,
-                    fontSize: 11,
+                    fontSize: 29,
                     fontWeight: FontWeight.w800,
-                    letterSpacing: 1.5,
+                    letterSpacing: -.8,
                   ),
                 ),
-                const SizedBox(height: 6),
-                const Text(
-                  'Promoted this week',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -.5,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                if (promotionsBusy)
-                  const LinearProgressIndicator(
-                    semanticsLabel: 'Loading promoted stories',
-                  ),
-                if (promotionsWarning != null) Notice(promotionsWarning!),
-                if (!promotionsBusy &&
-                    promotionsWarning == null &&
-                    sponsored.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      'No promoted stories this week. Put your published article in the spotlight.',
-                    ),
-                  ),
-                for (final post in sponsored)
+                const SizedBox(height: 14),
+                if (warning != null) Notice(warning!),
+                if (posts.isNotEmpty)
                   IphoneStory(
-                    key: ValueKey('promoted-${post['id']}'),
-                    post: post,
+                    post: posts.first,
                     repository: widget.repository,
-                    sponsored: true,
+                    lead: true,
                   ),
-                FilledButton.icon(
-                  onPressed: widget.onAdvertise,
-                  icon: const Icon(CupertinoIcons.speaker_2, size: 18),
-                  label: const Text('Promote your article'),
+                Container(
+                  key: const ValueKey('weekly-promotions'),
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'SPONSORED',
+                        style: TextStyle(
+                          color: newsAccent,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      const Text(
+                        'Promoted this week',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -.5,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      if (promotionsBusy)
+                        const LinearProgressIndicator(
+                          semanticsLabel: 'Loading promoted stories',
+                        ),
+                      if (promotionsWarning != null) Notice(promotionsWarning!),
+                      if (!promotionsBusy &&
+                          promotionsWarning == null &&
+                          sponsored.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 12),
+                          child: Text(
+                            'No promoted stories this week. Put your published article in the spotlight.',
+                          ),
+                        ),
+                      for (final post in sponsored)
+                        IphoneStory(
+                          key: ValueKey('promoted-${post['id']}'),
+                          post: post,
+                          repository: widget.repository,
+                          sponsored: true,
+                        ),
+                      FilledButton.icon(
+                        onPressed: widget.onAdvertise,
+                        icon: const Icon(CupertinoIcons.speaker_2, size: 18),
+                        label: const Text('Promote your article'),
+                      ),
+                    ],
+                  ),
                 ),
+
+                if (posts.length > 1)
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final pair = posts.skip(1).take(2).toList();
+                      final columns =
+                          constraints.maxWidth >= 340 &&
+                          MediaQuery.textScalerOf(context).scale(1) <= 1.3;
+                      if (!columns) {
+                        return Column(
+                          children: [
+                            for (final post in pair)
+                              IphoneStory(
+                                post: post,
+                                repository: widget.repository,
+                              ),
+                          ],
+                        );
+                      }
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (var i = 0; i < pair.length; i++) ...[
+                            if (i > 0) const SizedBox(width: 10),
+                            Expanded(
+                              child: IphoneStory(
+                                post: pair[i],
+                                repository: widget.repository,
+                                tile: true,
+                              ),
+                            ),
+                          ],
+                        ],
+                      );
+                    },
+                  ),
+                for (final post in posts.skip(3))
+                  IphoneStory(post: post, repository: widget.repository),
+                if (busy)
+                  const Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                if (!busy && posts.isEmpty)
+                  const Notice(
+                    'No stories available yet. Pull down to refresh. Your downloaded stories are in Saved.',
+                  ),
+                if (!busy && page < pages)
+                  OutlinedButton(
+                    onPressed: load,
+                    child: const Text('More stories'),
+                  ),
+                if (!busy)
+                  TextButton(
+                    onPressed: () => load(reset: true),
+                    child: const Text('Refresh news'),
+                  ),
               ],
             ),
           ),
-
-          if (posts.length > 1)
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final pair = posts.skip(1).take(2).toList();
-                final columns =
-                    constraints.maxWidth >= 340 &&
-                    MediaQuery.textScalerOf(context).scale(1) <= 1.3;
-                if (!columns) {
-                  return Column(
-                    children: [
-                      for (final post in pair)
-                        IphoneStory(post: post, repository: widget.repository),
-                    ],
-                  );
-                }
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (var i = 0; i < pair.length; i++) ...[
-                      if (i > 0) const SizedBox(width: 10),
-                      Expanded(
-                        child: IphoneStory(
-                          post: pair[i],
-                          repository: widget.repository,
-                          tile: true,
-                        ),
-                      ),
-                    ],
-                  ],
-                );
-              },
-            ),
-          for (final post in posts.skip(3))
-            IphoneStory(post: post, repository: widget.repository),
-          if (busy)
-            const Padding(
-              padding: EdgeInsets.all(24),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          if (!busy && posts.isEmpty)
-            const Notice(
-              'No stories available yet. Pull down to refresh. Your downloaded stories are in Saved.',
-            ),
-          if (!busy && page < pages)
-            OutlinedButton(onPressed: load, child: const Text('More stories')),
-          if (!busy)
-            TextButton(
-              onPressed: () => load(reset: true),
-              child: const Text('Refresh news'),
-            ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

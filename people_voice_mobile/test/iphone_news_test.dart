@@ -39,6 +39,7 @@ void main() {
         );
       });
       var advertiseTaps = 0;
+      var moreTaps = 0, notificationTaps = 0;
       addTearDown(() => store.db.close());
       final api = Api(
         client: MockClient((request) async {
@@ -86,13 +87,14 @@ void main() {
               repository: repository,
               onAdvertise: () => advertiseTaps++,
               onAccount: () {},
-              onMore: () {},
-              onNotifications: () {},
+              onMore: () => moreTaps++,
+              onNotifications: () => notificationTaps++,
             ),
           ),
         ),
       );
       await settle(tester);
+      final headerPosition = tester.getTopLeft(find.text('FAYETTEVILLE'));
       await tester.scrollUntilVisible(
         find.text('Promoted this week'),
         200,
@@ -127,6 +129,11 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Promote your article'));
       expect(advertiseTaps, 1);
+      expect(tester.getTopLeft(find.text('FAYETTEVILLE')), headerPosition);
+      await tester.tap(find.byTooltip('More options'));
+      await tester.tap(find.byTooltip('Notifications'));
+      expect(moreTaps, 1);
+      expect(notificationTaps, 1);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.runAsync(() => store.db.close());
